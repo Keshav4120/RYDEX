@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from "react";
-import VechicleSlider from "./VechicleSlider";
+import VehicleSlider from "./VehicleSlider";
 import AuthModel from "./AuthModel";
 import HeroSection from "./HeroSection";
 
@@ -10,7 +10,7 @@ function PublicHome() {
     return (
         <>
             <HeroSection/>
-            <VechicleSlider/>
+            <VehicleSlider/>
             <AuthModel open={authOpen} onClose={()=>setAuthOpen(false)}/>
         </>
     )

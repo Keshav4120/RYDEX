@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RYDEX",
+  title: "URYDER",
   description: "Smart Vechicle Booking Platform",
 };
 
