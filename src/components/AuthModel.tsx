@@ -5,6 +5,8 @@ import { Circle, CircleDashed, Loader, Lock, Mail, User, X } from "lucide-react"
 import Image from "next/image";
 import { div } from "motion/react-client";
 import axios from "axios";
+import { sign } from "crypto";
+import { signIn, useSession } from "next-auth/react";
 type propType = {
     open: boolean,
     onClose: () => void
@@ -17,6 +19,8 @@ function AuthModel({ open, onClose }: propType) {
     const [password, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
     const [err, setError] = useState("")
+    const {data} = useSession()
+    console.log(data)
     // we use axios to fetch data
     const handleSignup = async () => {
         setLoading(true)
@@ -30,6 +34,14 @@ function AuthModel({ open, onClose }: propType) {
             setLoading(false)
             setError(error.response.data.message ?? "Something Went Wrong")
         }
+    }
+    const handleLogin=async()=>{
+        setLoading(true)
+        const res = await signIn("credentials",{
+            email,password,redirect:false
+        })
+        setLoading(false)
+        console.log(res)
     }
     return (
         <AnimatePresence>
@@ -83,8 +95,8 @@ function AuthModel({ open, onClose }: propType) {
                                                     <input type="password" placeholder="Password" className="w-full bg-transparent outline-none text-sm" onChange={(e) => setPassword(e.target.value)} value={password} />
                                                 </div>
 
-                                                <button className="w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition">
-                                                    Login
+                                                <button className="w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition" onClick={handleLogin}>
+                                                {!loading?"Login" : <Loader size={18} color="white" className="animate-spin"/>}
                                                 </button>
                                                 <p className="mt-6 text-center text-sm text-gray-500">
                                                     Don't have an account?{" "}
@@ -123,12 +135,12 @@ function AuthModel({ open, onClose }: propType) {
                                                     {!loading?"Sign Up" : <Loader size={18} color="white" className="animate-spin"/>}
                                                 </button>
                                                 <p className="mt-6 text-center text-sm text-gray-500">
-                                                    Don't have an account?{" "}
+                                                    Already have an account?{" "}
                                                     <span
-                                                        onClick={() => setStep("signup")}
+                                                        onClick={() => setStep("login")}
                                                         className="text-black font-medium hover:underline cursor-pointer"
                                                     >
-                                                        Sign Up
+                                                        Login
                                                     </span>
                                                 </p>
                                             </div>
