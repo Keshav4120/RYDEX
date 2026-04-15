@@ -19,7 +19,8 @@ function AuthModel({ open, onClose }: propType) {
     const [password, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
     const [err, setError] = useState("")
-    const {data} = useSession()
+    const { data } = useSession()
+    const [otp, setOtp] = useState(["", "", "", "", "", ""])
     console.log(data)
     // we use axios to fetch data
     const handleSignup = async () => {
@@ -28,20 +29,56 @@ function AuthModel({ open, onClose }: propType) {
             const { data } = await axios.post("/api/auth/register", {
                 name, email, password
             })
-            console.log(data)
+
+            // console.log(data)
+            setError("")
+            setStep('otp')
             setLoading(false)
-        } catch (error:any) {
+        } catch (error: any) {
             setLoading(false)
             setError(error.response.data.message ?? "Something Went Wrong")
         }
     }
-    const handleLogin=async()=>{
+    const handleVerifyEmail = async () => {
         setLoading(true)
-        const res = await signIn("credentials",{
-            email,password,redirect:false
+        try {
+            const { data } = await axios.post("/api/auth/verify-email", {
+                email, otp: otp.join("")
+            })
+            console.log(data)
+            setOtp(["","","","","",""])
+            setError("")
+            setStep('login')
+            setLoading(false)
+        } catch (error: any) {
+            setLoading(false)
+            setError(error.response.data.message ?? "Something Went Wrong")
+        }
+    }
+
+    const handleLogin = async () => {
+        setLoading(true)
+        const res = await signIn("credentials", {
+            email, password, redirect: false
         })
         setLoading(false)
         console.log(res)
+    }
+
+    const handleGoogleLogin = async () => {
+        await signIn("google")
+    }
+    const handleChangeOtp = (index: number, value: string) => {
+        if (!/^[0-9]?$/.test(value)) return
+        const updated = [...otp]
+        updated[index] = value
+        setOtp(updated)
+        if (value && index < otp.length - 1) {
+            document.getElementById(`otp-${index + 1}`)?.focus()
+        }
+        if (!value && index > 0) {
+            document.getElementById(`otp-${index - 1}`)?.focus()
+        }
     }
     return (
         <AnimatePresence>
@@ -68,7 +105,7 @@ function AuthModel({ open, onClose }: propType) {
                                     <h1 className="text-3xl font-extrabold tracking-widest">URYDER</h1>
                                     <p className="mt-1 text-xs text-gray-500">Vehicle Booking</p>
                                 </div>
-                                <button className="w-full h-11 rounded-xl border border-black/20 flex items-center justify-center gap-3 text-sm font-semibold hover:bg-black hover:text-white transition">
+                                <button className="w-full h-11 rounded-xl border border-black/20 flex items-center justify-center gap-3 text-sm font-semibold hover:bg-black hover:text-white transition" onClick={handleGoogleLogin}>
                                     <Image src={'/google.png'} alt="google" width={20} height={20} />
                                     Continue with Google
                                 </button>
@@ -95,8 +132,8 @@ function AuthModel({ open, onClose }: propType) {
                                                     <input type="password" placeholder="Password" className="w-full bg-transparent outline-none text-sm" onChange={(e) => setPassword(e.target.value)} value={password} />
                                                 </div>
 
-                                                <button className="w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition" onClick={handleLogin}>
-                                                {!loading?"Login" : <Loader size={18} color="white" className="animate-spin"/>}
+                                                <button className="w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition flex justify-center items-center" onClick={handleLogin}>
+                                                    {!loading ? "Login" : <Loader size={18} color="white" className="animate-spin" />}
                                                 </button>
                                                 <p className="mt-6 text-center text-sm text-gray-500">
                                                     Don't have an account?{" "}
@@ -132,7 +169,7 @@ function AuthModel({ open, onClose }: propType) {
                                                 </div>
                                                 {err && <p className="text-red-500">*{err}</p>}
                                                 <button className="w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition flex justify-center items-center" disabled={loading} onClick={handleSignup}>
-                                                    {!loading?"Sign Up" : <Loader size={18} color="white" className="animate-spin"/>}
+                                                    {!loading ? "Sign Up" : <Loader size={18} color="white" className="animate-spin" />}
                                                 </button>
                                                 <p className="mt-6 text-center text-sm text-gray-500">
                                                     Already have an account?{" "}
@@ -145,6 +182,27 @@ function AuthModel({ open, onClose }: propType) {
                                                 </p>
                                             </div>
 
+                                        </motion.div>
+                                    )}
+
+                                    {step == "otp" && (
+                                        <motion.div
+                                            key="otp"
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -20 }}
+                                        >
+                                            <h2 className="text-xl font-semibold">Verify Email</h2>
+                                            <div className="mt-6 flex justify-between gap-2">
+                                                {otp.map((digit, i) => (
+                                                    <input key={i} id={`otp-${i}`} value={digit} maxLength={1} className="w-10 h-12 sm:w-12 text-center text-lg font-semibold rounded-xl bg-white border border-black/20 outline-none" onChange={(e) => handleChangeOtp(i, e.target.value)} />
+
+                                                ))}
+                                            </div>
+                                            {err && <p className="text-red-500">*{err}</p>}
+                                            <button className="mt-6 w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 flex justify-center items-center transition" disabled={loading} onClick={handleVerifyEmail}>
+                                                {!loading ? "Verify and Create Account" : <Loader size={18} color="white" className="animate-spin" />}
+                                            </button>
                                         </motion.div>
                                     )}
                                 </div>
