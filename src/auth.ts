@@ -22,10 +22,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   async authorize(credentials, request) {
-    if(!credentials.email || !credentials.password) {
+    if(!credentials || !credentials.email || !credentials.password) {
       throw Error("missing credentials")
     }
-    const email = credentials.email;
+    const email = credentials.email as string;
     const password = credentials.password as string;
     await connectDb()
     const user = await User.findOne({email}) //If we doest make email then we have to write email:credentials.email
@@ -49,8 +49,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
 }) ,
   Google({
-    clientId:process.env.AUTH_GOOGLE_ID,
-    clientSecret:process.env.AUTH_GOOGLE_SECRET
+    clientId:process.env.AUTH_GOOGLE_ID as string,
+    clientSecret:process.env.AUTH_GOOGLE_SECRET as string
   })
 //we can also add other credentials here like google and github
   ],
@@ -73,22 +73,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async jwt({token,user}) {
       if (user){
-      token.name = user.name,
-      token.id = user.id,
-      token.email = user.email,
-      token.role = user.role
+        token.name = user.name;
+        token.id = user.id;
+        token.email = user.email;
+        token.role = user.role;
       }
       return token
     },
     async session ({token , session}) {
       if(session.user){
-      session.user.name = token.name,
-      session.user.id = token.id as string,
-      session.user.email = token.email as string,
-      session.user.role = token.role as string
+        session.user.name = token.name;
+        session.user.id = token.id as string;
+        session.user.email = token.email as string;
+        session.user.role = token.role as string;
+      }
+      return session
     }
-    return session
-  }
   },
   pages:{
     signIn:"/signin",
