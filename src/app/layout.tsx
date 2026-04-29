@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { SessionProvider } from "next-auth/react";
-import  Provider  from "@/lib/Provider";
+import Provider from "@/lib/Provider";
+import ReduxProvider from "@/redux/reduxProvider";
+import IniUser from "@/iniUser";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -16,14 +17,14 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "URYDER",
-  description: "Smart Vechicle Booking Platform",
+  description: "Smart Vehicle Booking Platform",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html
       lang="en"
@@ -31,9 +32,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Provider>
-        {children}
+          <ReduxProvider>
+            <IniUser />
+            {children}
+          </ReduxProvider>
         </Provider>
-
       </body>
     </html>
   );
