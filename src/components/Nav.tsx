@@ -82,14 +82,14 @@ function Nav() {
                                                                 <div className="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center"><Car size={14} /></div>
                                                                 <div className="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center"><Truck size={14} /></div>
                                                             </div>
-                                                            Become a Partner
-                                                            <ChevronRight size={16} className="ml-auto" />
+                                                            <span className="flex-1 text-left">Become a Partner</span>
+                                                            <ChevronRight size={16} />
                                                         </div>
                                                         )
                                                     }
                                                     <button className="w-full flex items-center gap-3 py-3 hover:bg-gray-100 rounded-xl mt-2" onClick={handleLogout}>
                                                         <LogOut size={16} />
-                                                        Logout
+                                                        <span className="flex-1 text-left">Logout</span>
                                                     </button>
                                                 </div>
                                             </motion.div>
@@ -183,14 +183,14 @@ function Nav() {
                                             <div className="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center"><Car size={14} /></div>
                                             <div className="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center"><Truck size={14} /></div>
                                         </div>
-                                        Become a Partner
-                                        <ChevronRight size={16} className="ml-auto" />
+                                        <span className="flex-1 text-left">Become a Partner</span>
+                                        <ChevronRight size={16} />
                                     </div>
                                     )
                                 }
                                 <button className="w-full flex items-center gap-3 py-3 hover:bg-gray-100 rounded-xl mt-2" onClick={handleLogout}>
                                     <LogOut size={16} />
-                                    Logout
+                                    <span className="flex-1 text-left">Logout</span>
                                 </button>
                             </div>
                         </motion.div>
