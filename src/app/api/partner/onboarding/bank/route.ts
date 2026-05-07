@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
         if (!accountHolder || !accountNumber || !ifsc || !mobileNumber) {
             return Response.json({ message: "All fields are required" }, { status: 400 })
         }
-        const partnerBank = await PartnerBank.create(
+        const partnerBank = await PartnerBank.findOneAndUpdate(
             { owner: user._id },
             {
                 accountHolder,
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
                 ifsc,
                 upiId,
                 status: "added"
-            }, { upset: true, new: true }
+            }, { upsert: true, new: true }
         )
 
         user.mobileNumber = mobileNumber

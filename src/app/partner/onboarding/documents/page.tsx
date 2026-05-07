@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { motion } from "motion/react"
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, FileCheck, UploadCloud } from 'lucide-react'
+import { ArrowLeft, FileCheck, Loader, UploadCloud } from 'lucide-react'
 import axios from 'axios'
 
 type docsType = "aadhar" | "licence" | "rc"
@@ -14,20 +14,29 @@ function page() {
         licence: null,
         rc: null
     })
-
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
     const handleDocs = async () => {
+        setError("")
+        setLoading(true)
         try {
             const fromData = new FormData();
             if (!docs.aadhar || !docs.licence || !docs.rc) {
+                setError("Please upload all documents")
+
+                setError("Please upload all documents")
+                setLoading(false)
                 return null
             }
             fromData.append("aadhar", docs.aadhar)
             fromData.append("licence", docs.licence)
             fromData.append("rc", docs.rc)
             const { data } = await axios.post("/api/partner/onboarding/documents", fromData)
-            console.log(data);
-        } catch (error) {
+            setLoading(false)
+        } catch (error: any) {
+            setError(error?.response?.data?.message ?? "Something went wrong")
             console.log(error)
+            setLoading(false)
         }
     }
     const handleImage = (doc: docsType, file: File | null) => {
@@ -130,13 +139,18 @@ function page() {
                     <FileCheck size={16} />
                     <p>Documents are securely stored and manually verified by our team.</p>
                 </div>
+                {error && <div className='mt-6 text-red-500 text-sm text-center'>{error}</div>}
                 <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={handleDocs}
+                    disabled={loading}
                     className='mt-8 w-full h-14 rounded-2xl bg-black text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-40 transition'
                 >
-                    Continue
+                    {
+                        loading ? <Loader className='text-white animate-spin' /> :
+                            "Continue"
+                    }
                 </motion.button>
             </motion.div>
 
