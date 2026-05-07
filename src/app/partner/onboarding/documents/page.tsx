@@ -44,7 +44,7 @@ function page() {
 
         setDocs(prev => ({ ...prev, [doc]: file }))
     }
-
+    const isCompleted = docs.aadhar && docs.licence && docs.rc
     return (
         <div className='min-h-screen bg-white flex items-center justify-center px-4'>
             <motion.div
@@ -78,8 +78,8 @@ function page() {
 
                         </div>
 
-                        <div>
-                            <span className='text-xs text-gray-400'>Upload</span>
+                        <div className='flex items-center gap-4'>
+                            {docs.aadhar ? <span className='text-xs text-green-500'>✓{docs.aadhar?.name}</span> : <span className='text-xs text-gray-400'>Upload</span>}
                             <div className="w-10 h-10 border rounded-full bg-black text-white flex items-center justify-center">
                                 <UploadCloud size={18} />
                             </div>
@@ -100,8 +100,8 @@ function page() {
 
                         </div>
 
-                        <div>
-                            <span className='text-xs text-gray-400'>Upload</span>
+                        <div className='flex items-center gap-4'>
+                            {docs.licence ? <span className='text-xs text-green-500'>✓{docs.licence?.name}</span> : <span className='text-xs text-gray-400'>Upload</span>}
                             <div className="w-10 h-10 border rounded-full bg-black text-white flex items-center justify-center">
                                 <UploadCloud size={18} />
                             </div>
@@ -123,8 +123,8 @@ function page() {
 
                         </div>
 
-                        <div>
-                            <span className='text-xs text-gray-400'>Upload</span>
+                        <div className='flex items-center gap-4'>
+                            {docs.rc ? <span className='text-xs text-green-500'>✓{docs.rc?.name}</span> : <span className='text-xs text-gray-400'>Upload</span>}
                             <div className="w-10 h-10 border rounded-full bg-black text-white flex items-center justify-center">
                                 <UploadCloud size={18} />
                             </div>
@@ -144,7 +144,7 @@ function page() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={handleDocs}
-                    disabled={loading}
+                    disabled={loading || !isCompleted}
                     className='mt-8 w-full h-14 rounded-2xl bg-black text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-40 transition'
                 >
                     {

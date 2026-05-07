@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from "motion/react"
 import { ArrowLeft, Bike, Car, Truck, Package, CircleDashed, Loader } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -32,6 +32,21 @@ function page() {
             setLoading(false)
         }
     }
+
+    useEffect(() => {
+        const handlefetch = async () => {
+            try {
+                const { data } = await axios.get('/api/partner/onboarding/vehicle')
+                setVechicleType(data.type)
+                setVehicleNumber(data.number)
+                setVehicleModel(data.vechicleModel)
+            } catch (error: any) {
+                console.log(error)
+
+            }
+        }
+        handlefetch()
+    }, [])
     return (
         <div className='min-h-screen bg-white flex items-center justify-center px-4'>
             <motion.div
