@@ -1,47 +1,58 @@
 import mongoose, { Document, Mongoose } from "mongoose";
 
-export interface IUser extends Document{
-    name : string;
-    email:string;
-    password?:string;
-    role:"user" | "partner" | "admin"
-    isEmailVerified?:boolean
-    otp?:string
-    otpExpires?:Date
-    createdAt:Date;
-    updatedAt:Date;
+export interface IUser extends Document {
+    name: string;
+    email: string;
+    password?: string;
+    role: "user" | "partner" | "admin"
+    isEmailVerified?: boolean
+    otp?: string
+    otpExpires?: Date
+    partnerOnboardingStep: number
+    mobileNumber?: string
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 const userSchema = new mongoose.Schema<IUser>({
-    name:{
-        type:String,
-        required:true
+    name: {
+        type: String,
+        required: true
     },
-    email:{
-        type:String,
-        required:true,
-        unique:true
+    email: {
+        type: String,
+        required: true,
+        unique: true
     },
-    password:{
-        type:String,
+    password: {
+        type: String,
     },
-    role:{
-        type:"String",
-        default:"user",
-        enum:["user" , "partner" , "admin"]
+    role: {
+        type: "String",
+        default: "user",
+        enum: ["user", "partner", "admin"]
     },
-    isEmailVerified:{
-        type:"boolean",
-        default:false
+    isEmailVerified: {
+        type: "boolean",
+        default: false
     },
-    otp:{
-        type:String
+    partnerOnboardingStep: {
+        type: Number,
+        min: 0,
+        max: 8,
+        default: 0,
     },
-    otpExpires:{
-        type:Date
+    mobileNumber: {
+        type: String,
+    },
+    otp: {
+        type: String
+    },
+    otpExpires: {
+        type: Date
     }
 
-},{timestamps:true})
+}, { timestamps: true })
 
-const User = mongoose.models.User || mongoose.model("User" , userSchema)
+const User = mongoose.models.User || mongoose.model("User", userSchema)
 export default User

@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "motion/react"
 import { animate } from "motion";
 import Image from 'next/image'
 import Link from "next/link";
-import { redirect, usePathname } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import AuthModel from "./AuthModel";
 import { auth } from "@/auth";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,7 @@ function Nav() {
     const { userData } = useSelector((state: RootState) => state.user)
     const [menuOpen, setMenuOpen] = useState(false)
     const dispatch = useDispatch<AppDispatch>()
+    const router = useRouter()
     const handleLogout = async () => {
         await signOut({ redirect: false })
         dispatch(setUserData(null))
@@ -36,7 +37,7 @@ function Nav() {
                     shadow-[0_15px_50px_rgba(0,0,0,0.7)] py-3`}
             >
                 <div className='max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between'>
-                    <Image src={"/logo.png"} alt='logo' width={44} height={44} priority />
+                    <Link href={"/"}><Image src={"/logo.png"} alt='logo' width={44} height={44} priority /></Link>
                     <div className="hidden md:flex item-center gap-10">
                         {Nav_Items.map((i, index) => {
                             let href;
@@ -75,7 +76,7 @@ function Nav() {
                                                     <p className="font-semibold text-lg">{userData.name}</p>
                                                     <p className="text-xs text-gray-500 mb-4">{userData.role}</p>
                                                     {userData.role != "partner" &&
-                                                        (<div className="w-full flex items-center gap-3 py-3 hover:bg-gray-100 rounded-xl">
+                                                        (<div className="w-full flex items-center gap-3 py-3 hover:bg-gray-100 rounded-xl" onClick={() => router.push("/partner/onboarding/vehicle")}>
                                                             <div className="flex -space-x-1">
 
                                                                 <div className="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center"><Bike size={14} /></div>
@@ -114,7 +115,7 @@ function Nav() {
                             )
                             }
                         </div>
-                        <button className="md-hidden text-white" onClick={() => setMenuOpen(p => !p)}>
+                        <button className="md:hidden text-white" onClick={() => setMenuOpen(p => !p)}>
                             {menuOpen ? <X /> : <Menu />}
                         </button>
 
@@ -176,7 +177,7 @@ function Nav() {
                                 <p className="font-semibold text-lg">{userData.name}</p>
                                 <p className="text-xs text-gray-500 mb-4">{userData.role}</p>
                                 {userData.role != "partner" &&
-                                    (<div className="w-full flex items-center gap-3 py-3 hover:bg-gray-100 rounded-xl">
+                                    (<div className="w-full flex items-center gap-3 py-3 hover:bg-gray-100 rounded-xl" onClick={() => router.push("/partner/onboarding/vehicle")}>
                                         <div className="flex -space-x-1">
 
                                             <div className="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center"><Bike size={14} /></div>
