@@ -3,8 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { RootState } from '@/redux/store';
 import { useSelector } from 'react-redux';
 import { motion } from 'motion/react'
-import { Check, CheckCheck, Lock } from 'lucide-react'
+import { Check, CheckCheck, Clock, Lock, Video } from 'lucide-react'
 import { useRouter } from 'next/navigation';
+import RejectionCard from './RejectionCard';
+import StatusCard from './StatusCard';
+import ActionCard from './ActionCard';
+import axios from 'axios';
 
 type Step = {
     id: number;
@@ -105,7 +109,71 @@ const PartnerDashboard = () => {
 
                 </div>
 
+                {
+                    activeStep == 3 && userData?.partnerStatus === "rejected" && (
+                        <RejectionCard
+                            title="Partner Rejected"
+                            reason={userData.rejectionReason}
+                            actionLabel={`Review and Update`}
+                            onAction={() => {
+                                router.push('/partner/onboarding/vehicle')
+                            }}
+                        />
+                    )
+                }
 
+                {
+                    activeStep == 3 && userData?.partnerStatus === "pending" && (
+                        <StatusCard
+                            icon={<Clock size={18} />}
+                            title={'Documents under review'}
+                            desc={"Admin is verifying your documents."}
+                        />
+                    )
+                }
+
+
+                {
+                    activeStep >= 4 && userData?.videoKycStatus === "rejected" ? (
+                        <RejectionCard
+                            title="Video Kyc Rejected"
+                            reason={userData?.videoKycRejectionReason}
+                            actionLabel="Request Re-KYC"
+                            onAction={async () => {
+                                await axios.post('/api/partner/video-kyc/request')
+                                window.location.reload()
+                            }}
+                        />
+                    ) : userData?.videoKycStatus === "re_requested" ? (
+                        <StatusCard
+                            icon={<Clock size={18} />}
+                            title="Re-KYC Requested"
+                            desc="Your request has been sent. Admin will schedule a new session shortly."
+                        />
+                    ) : activeStep == 4 && userData?.videoKycStatus === "approved" ? (
+                        <StatusCard
+                            icon={<Check size={18} />}
+                            title={'Video Kyc Approved'}
+                            desc={"You can now proceed to pricing."}
+                        />
+                    ) : activeStep == 4 && userData?.videoKycStatus === "in_progress" && userData.videoKycRoomId ? (
+                        <ActionCard
+                            icon={<Video size={18} />}
+                            title={'Admin Started Video Kyc'}
+                            desc={"You Can Join the Call To Complete Your Video Kyc."}
+                            actionLabel="Join Call"
+                            onAction={() => {
+                                router.push(`/video-kyc/${userData?.videoKycRoomId}`)
+                            }}
+                        />
+                    ) : activeStep == 4 ? (
+                        <StatusCard
+                            icon={<Clock size={18} />}
+                            title={'Video Kyc Pending'}
+                            desc={"Admin is verifying your video kyc."}
+                        />
+                    ) : null
+                }
             </div>
         </div>
     )

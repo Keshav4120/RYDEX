@@ -4,8 +4,21 @@ import { motion } from "motion/react"
 import { ArrowRight, CheckCircle2, User } from 'lucide-react'
 import { div } from 'motion/react-client'
 import { useRouter } from 'next/navigation'
+import axios from 'axios'
 function ContentList({ data, type }: any) {
     const router = useRouter()
+
+
+
+    const handleStartVideoKyc = async (id: string) => {
+        try {
+            const result = await axios.get(`/api/admin/video-kyc/start/${id}`)
+            window.location.reload()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     if (data?.length === 0) {
         return (
             <motion.div
@@ -26,7 +39,8 @@ function ContentList({ data, type }: any) {
             <div className='flex-items-center justify-between px-1 mb-1'>
                 <p className='text-xs font-semibold uppercase tracking-widest text-gray-400'>
                     {type === "partner" ? "Pending Partner Reviews" :
-                        type === "kyc" ? "Pending KYC Reviews" : "Pending Vehicle Reviews"
+                        type === "kyc" ? "Pending KYC Reviews" :
+                        type === "rejected" ? "Rejected KYC Partners" : "Pending Vehicle Reviews"
                     }
                 </p>
                 <p className='text-xs text-gray-400'>{data?.length} items</p>
@@ -52,23 +66,58 @@ function ContentList({ data, type }: any) {
                             </div>
                         </div>
                         <div className='shrink-0'>
-                            <motion.button
-                                whileTap={{ scale: 0.96 }}
-                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-950 hover:bg-neutral-800 text-white text-sm font-semibold transition-colors"
-                                onClick={() => {
-                                    type == "partner" ? router.push(`/admin/reviews/partner/${item._id}`) : router.push(`/admin/reviews/vehicle/${item._id}`)
-                                }}
-                            >
-                                Review
-                                <ArrowRight size={15} />
-                            </motion.button>
-
+                            {type === "rejected" ? (
+                                <div className='flex flex-col items-end gap-2'>
+                                    <span className='text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-100 text-amber-700'>
+                                        Re-KYC Requested
+                                    </span>
+                                    <motion.button
+                                        whileTap={{ scale: 0.96 }}
+                                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-950 hover:bg-neutral-800 text-white text-sm font-semibold transition-colors"
+                                        onClick={() => handleStartVideoKyc(item._id)}
+                                    >
+                                        Start Re-KYC
+                                        <ArrowRight size={15} />
+                                    </motion.button>
+                                </div>
+                            ) : item.videoKycStatus == "pending" ? (
+                                <motion.button whileTap={{ scale: 0.96 }}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-950 hover:bg-neutral-800 text-white text-sm font-semibold transition-colors"
+                                    onClick={() => {
+                                        handleStartVideoKyc(item._id)
+                                    }}
+                                >
+                                    Start Video KYC
+                                    <ArrowRight size={15} />
+                                </motion.button>
+                            ) : item.videoKycStatus == "in_progress" ? (
+                                <motion.button whileTap={{ scale: 0.96 }}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-950 hover:bg-neutral-800 text-white text-sm font-semibold transition-colors"
+                                    onClick={() => {
+                                        router.push(`/video-kyc/${item.videoKycRoomId}`)
+                                    }}
+                                >
+                                    Join Video KYC
+                                    <ArrowRight size={15} />
+                                </motion.button>
+                            ) : (
+                                <motion.button
+                                    whileTap={{ scale: 0.96 }}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-950 hover:bg-neutral-800 text-white text-sm font-semibold transition-colors"
+                                    onClick={() => {
+                                        type == "partner" ? router.push(`/admin/reviews/partner/${item._id}`) : router.push(`/admin/reviews/vehicle/${item._id}`)
+                                    }}
+                                >
+                                    Review
+                                    <ArrowRight size={15} />
+                                </motion.button>
+                            )}
                         </div>
 
                     </motion.div>)
             })}
 
-        </div>
+        </div >
     )
 }
 

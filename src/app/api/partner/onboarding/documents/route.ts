@@ -59,6 +59,8 @@ export async function POST(req: NextRequest) {
 
         if (user.partnerOnboardingStep < 2) {
             user.partnerOnboardingStep = 2
+        } else {
+            user.partnerOnboardingStep = 3
         }
         user.partnerStatus = "pending"
         await user.save()

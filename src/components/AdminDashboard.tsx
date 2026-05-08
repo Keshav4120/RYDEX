@@ -15,7 +15,7 @@ type Stats = {
     totalPendingPartner: number
     totalRejectedPartner: number
 }
-type Tab = "kyc" | "partner" | "vehicle"
+type Tab = "kyc" | "partner" | "vehicle" | "rejected"
 
 function AdminDashboard() {
     const [stats, setStats] = useState<Stats | null>(null)
@@ -23,6 +23,7 @@ function AdminDashboard() {
     const [partnerReviews, setPartnerReviews] = useState<any>()
     const [kycReviews, setKycReviews] = useState<any>()
     const [vehicleReviews, setVehicleReviews] = useState<any>()
+    const [rejectedPartners, setRejectedPartners] = useState<any>()
     const handleGetData = async () => {
         try {
             const { data } = await axios.get("/api/admin/dashboard")
@@ -33,8 +34,27 @@ function AdminDashboard() {
         }
 
     }
+    const handleGetKycData = async () => {
+        try {
+            const { data } = await axios.get("/api/admin/video-kyc/pending")
+            console.log(data)
+            setKycReviews(data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleGetRejectedPartners = async () => {
+        try {
+            const { data } = await axios.get("/api/admin/rejected-partners")
+            setRejectedPartners(data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
     useEffect(() => {
+        handleGetKycData()
         handleGetData()
+        handleGetRejectedPartners()
     }, [])
 
     return (
@@ -88,6 +108,13 @@ function AdminDashboard() {
                         onClick={() => setActiveTab("vehicle")
                         }
                     >Pending Vehicle Documents</TabButton>
+                    <TabButton
+                        active={active == "rejected"}
+                        count={rejectedPartners?.length ?? 0}
+                        icon={<XCircle size={15} />}
+                        onClick={() => setActiveTab("rejected")
+                        }
+                    >Rejected KYC Partners</TabButton>
 
                 </div>
 
@@ -104,6 +131,7 @@ function AdminDashboard() {
                         {active == "partner" && <ContentList data={partnerReviews ?? []} type={"partner"} />}
                         {active == "kyc" && <ContentList data={kycReviews ?? []} type={"kyc"} />}
                         {active == "vehicle" && <ContentList data={vehicleReviews ?? []} type={"vehicle"} />}
+                        {active == "rejected" && <ContentList data={rejectedPartners ?? []} type={"rejected"} />}
                     </motion.div>
                 </AnimatePresence>
 

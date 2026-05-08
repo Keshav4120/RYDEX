@@ -32,9 +32,7 @@ export async function POST(req: NextRequest) {
         )
 
         user.mobileNumber = mobileNumber
-        if (user.partnerOnboardingStep < 3) {
-            user.partnerOnboardingStep = 3
-        }
+        user.partnerOnboardingStep = 3
         user.partnerStatus = "pending"
         await user.save()
         return Response.json(partnerBank, { status: 200 })

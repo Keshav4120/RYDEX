@@ -29,7 +29,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
             return Response.json({ error: "Partner docs or bank not found" }, { status: 400 })
         }
         partner.partnerStatus = "approved"
-        partner.partnerOnBoardingSteps = 4
+        partner.videoKycStatus = "pending"
+        partner.partnerOnboardingStep = 4
         await partner.save()
         partnerDocs.status = "approved"
         await partnerDocs.save()
