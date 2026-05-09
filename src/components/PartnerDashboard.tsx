@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { RootState } from '@/redux/store';
 import { useSelector } from 'react-redux';
 import { motion } from 'motion/react'
-import { Check, CheckCheck, Clock, Lock, Video } from 'lucide-react'
+import { Check, CheckCheck, Clock, Clock1, Lock, Video } from 'lucide-react'
 import { useRouter } from 'next/navigation';
 import RejectionCard from './RejectionCard';
 import StatusCard from './StatusCard';
 import ActionCard from './ActionCard';
 import axios from 'axios';
+import PricingModel from './PricingModel';
+import { IVehicle } from '@/models/vehicle.model';
 
 type Step = {
     id: number;
@@ -31,13 +33,31 @@ const PartnerDashboard = () => {
     const router = useRouter();
     const [activeStep, setActiveStep] = useState(0);
     const { userData } = useSelector((state: RootState) => state.user)
+    const [showPricing, setShowPricing] = useState(false)
+    const [vehicleData, setVehicleData] = useState<IVehicle | null>(null)
     useEffect(() => {
         if (userData) {
             setActiveStep(userData.partnerOnboardingStep)
         }
     }, [userData])
 
+    const handleGetPricing = async () => {
+        try {
+            const { data } = await axios.get("/api/partner/onboarding/pricing")
+            setVehicleData(data.vehicle)
+        } catch (error: any) {
+            console.log(error)
+        }
+    }
+    useEffect(() => {
+        handleGetPricing()
+    }, [])
+
     const handleStepClick = (step: Step, locked: boolean) => {
+        if (step.id === 6 && userData?.videoKycStatus === "approved") {
+            setShowPricing(true)
+            return
+        }
         if (step.route && !locked) {
             router.push(step.route);
         }
@@ -174,7 +194,32 @@ const PartnerDashboard = () => {
                         />
                     ) : null
                 }
+                {activeStep == 6 && vehicleData?.status === "pending" && (
+                    <StatusCard
+                        icon={<Clock size={18} />}
+                        title={'Pricing Under Review'}
+                        desc={"Admin is reviewing your pricing."}
+                    />
+                )}
+                {activeStep == 6 && vehicleData?.status === "rejected" && (
+                    <RejectionCard
+                        title={"Vehicle Rejected"}
+                        reason={vehicleData?.rejectionReason}
+                        actionLabel="Edit Vehicle Information"
+                        onAction={() => {
+                            setShowPricing(true)
+                        }}
+                    />
+                )}
             </div>
+
+
+            <PricingModel
+                open={showPricing}
+                onClose={() => setShowPricing(false)}
+                onSave={handleGetPricing}
+                data={vehicleData}
+            />
         </div>
     )
 }

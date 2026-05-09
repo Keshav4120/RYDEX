@@ -28,6 +28,7 @@ function AdminDashboard() {
         try {
             const { data } = await axios.get("/api/admin/dashboard")
             setStats(data.stats)
+            setVehicleReviews(data.pendingVehicle)
             setPartnerReviews(data.pendingPartnerReviews)
         } catch (error) {
             console.log(error)

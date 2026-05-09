@@ -2,7 +2,6 @@
 import React from 'react'
 import { motion } from "motion/react"
 import { ArrowRight, CheckCircle2, User } from 'lucide-react'
-import { div } from 'motion/react-client'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
 function ContentList({ data, type }: any) {
@@ -40,14 +39,14 @@ function ContentList({ data, type }: any) {
                 <p className='text-xs font-semibold uppercase tracking-widest text-gray-400'>
                     {type === "partner" ? "Pending Partner Reviews" :
                         type === "kyc" ? "Pending KYC Reviews" :
-                        type === "rejected" ? "Rejected KYC Partners" : "Pending Vehicle Reviews"
+                            type === "rejected" ? "Rejected KYC Partners" : "Pending Vehicle Reviews"
                     }
                 </p>
                 <p className='text-xs text-gray-400'>{data?.length} items</p>
             </div>
             {data.map((item: any, index: number) => {
-                const name = item.name
-                const email = item.email
+                const name = item.name || item.owner?.name || "Unknown"
+                const email = item.email || item.owner?.email || "—"
                 return (
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}

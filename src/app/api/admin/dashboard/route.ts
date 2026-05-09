@@ -27,6 +27,18 @@ export async function GET(req: NextRequest) {
             owner: { $in: partnerIds }
         })
 
+
+        // Only show vehicles where owner has reached the pricing step (step 6+)
+        const pricingPartners = await User.find({
+            role: "partner",
+            partnerOnboardingStep: { $gte: 6 }
+        }).select("_id")
+        const pricingPartnerIds = pricingPartners.map(p => p._id)
+
+        const pendingVehicle = await Vehicle.find({
+            status: "pending",
+            owner: { $in: pricingPartnerIds }
+        }).populate("owner")
         const vehicleTypeMap = new Map(
             partnerVehicles.map(vehicle => [String(vehicle.id), vehicle.vehicleType])
         )
@@ -40,6 +52,7 @@ export async function GET(req: NextRequest) {
         ))
 
         return NextResponse.json({
+            pendingVehicle,
             stats: {
                 totalPartner, totalApprovedPartner, totalPendingPartner, totalRejectedPartner
             },
