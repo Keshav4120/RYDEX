@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+</head>
+<body class="bg-[#0a0a0a] text-gray-300 min-h-screen py-20 px-6">
+    <div class="max-w-4xl mx-auto border border-white/10 bg-[#111] rounded-[40px] p-8 md:p-16 shadow-2xl">
+        <header class="text-center mb-16">
+            <h1 class="text-5xl md:text-7xl font-black text-white tracking-tighter mb-6 uppercase">
+                🚀 URYDER
+            </h1>
+            <p class="text-xl md:text-2xl font-bold gradient-text mb-8">
+                Smart Real-Time Mobility Ecosystem
+            </p>
+            <p class="text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                URYDER is an enterprise-grade ride-sharing platform engineered for high-performance geospatial tracking and real-time state synchronization.
+            </p>
+        </header>
+        <section class="mb-16">
+            <h2 class="text-xs font-black uppercase tracking-[0.4em] text-blue-500 mb-8 border-b border-white/5 pb-4">
+                Technical Stack
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/10 hover:bg-white/10 transition-all">
+                    <p class="text-white font-bold text-sm">Next.js 15</p>
+                    <p class="text-[10px] text-gray-500 uppercase">Frontend Framework</p>
+                </div>
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/10 hover:bg-white/10 transition-all">
+                    <p class="text-white font-bold text-sm">Socket.io</p>
+                    <p class="text-[10px] text-gray-500 uppercase">Real-Time Engine</p>
+                </div>
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/10 hover:bg-white/10 transition-all">
+                    <p class="text-white font-bold text-sm">MongoDB</p>
+                    <p class="text-[10px] text-gray-500 uppercase">NoSQL Database</p>
+                </div>
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/10 hover:bg-white/10 transition-all">
+                    <p class="text-white font-bold text-sm">TypeScript</p>
+                    <p class="text-[10px] text-gray-500 uppercase">Type Safety</p>
+                </div>
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/10 hover:bg-white/10 transition-all">
+                    <p class="text-white font-bold text-sm">Razorpay</p>
+                    <p class="text-[10px] text-gray-500 uppercase">Payment Gateway</p>
+                </div>
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/10 hover:bg-white/10 transition-all">
+                    <p class="text-white font-bold text-sm">Tailwind CSS</p>
+                    <p class="text-[10px] text-gray-500 uppercase">UI/UX Styling</p>
+                </div>
+            </div>
+        </section>
+        <section class="mb-16">
+            <h2 class="text-xs font-black uppercase tracking-[0.4em] text-emerald-500 mb-8 border-b border-white/5 pb-4">
+                Core Capabilities
+            </h2>
+            <ul class="space-y-6">
+                <li class="flex gap-4">
+                    <span class="text-emerald-500 font-black">✔</span>
+                    <div>
+                        <h3 class="text-white font-bold">Real-Time State Sync</h3>
+                        <p class="text-sm text-gray-500">WebSocket-driven communication for instantaneous booking requests and tracking.</p>
+                    </div>
+                </li>
+                <li class="flex gap-4">
+                    <span class="text-emerald-500 font-black">✔</span>
+                    <div>
+                        <h3 class="text-white font-bold">Live Geospatial Tracking</h3>
+                        <p class="text-sm text-gray-500">Integrated Google Maps routing with dynamic polyline updates for active trips.</p>
+                    </div>
+                </li>
+                <li class="flex gap-4">
+                    <span class="text-emerald-500 font-black">✔</span>
+                    <div>
+                        <h3 class="text-white font-bold">Automated Onboarding</h3>
+                        <p class="text-sm text-gray-500">KYC-driven partner verification with secure document handling and vehicle approval.</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+        <section class="mb-16">
+            <h2 class="text-xs font-black uppercase tracking-[0.4em] text-orange-500 mb-8 border-b border-white/5 pb-4">
+                Engineering Excellence
+            </h2>
+            <p class="text-sm leading-relaxed text-gray-400">
+                URYDER utilizes a decoupled architecture where the socket server manages thousands of concurrent connections independently of the main API. The database is modeled for high read/write efficiency, ensuring that trip states are consistent across user and partner dashboards.
+            </p>
+        </section>
+        <footer class="text-center pt-8 border-t border-white/5">
+            <p class="text-[10px] font-black uppercase tracking-[0.5em] text-gray-600">
+                Created by Keshav Jindal &copy; 2026
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
