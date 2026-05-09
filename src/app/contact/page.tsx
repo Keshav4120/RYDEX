@@ -15,6 +15,8 @@ import {
   ChevronDown
 } from 'lucide-react'
 import { TwitterIcon, InstagramIcon, LinkedinIcon, FacebookIcon, YoutubeIcon } from '@/components/Icons'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
 
 const ContactInfo = [
   {
@@ -75,6 +77,7 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <Nav />
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-gradient-to-b from-neutral-50 to-white -z-10" />
@@ -370,6 +373,7 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   )
 }

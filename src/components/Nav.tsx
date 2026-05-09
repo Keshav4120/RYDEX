@@ -9,7 +9,7 @@ import AuthModel from "./AuthModel";
 import { auth } from "@/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { Bike, Car, ChevronRight, LogOut, Menu, Navigation, Truck, X } from "lucide-react";
+import { Bike, Car, ChevronRight, LogOut, Menu, Navigation, Truck, X, Clock } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { setUserData } from "@/redux/userSlice";
 const Nav_Items = ["Home", "Booking", "About Us", "Contact"]
@@ -37,18 +37,34 @@ function Nav() {
             >
                 <div className='w-full px-6 md:px-14 flex items-center justify-between'>
                     <Link href={"/"}><Image src={"/logo.png"} alt='logo' width={44} height={44} priority /></Link>
-                    <div className="hidden md:flex item-center gap-10">
-                        {Nav_Items.map((i, index) => {
-                            let href;
-                            if (i == "Home") {
-                                href = `/`
+                    <div className="hidden md:flex items-center gap-10">
+                        {Nav_Items.map((item, index) => {
+                            let href = "/";
+                            let label = item;
+
+                            if (item === "Home") href = "/";
+                            else if (item === "Booking") {
+                                if (userData) {
+                                    label = "My Rides";
+                                    href = "/user/bookings";
+                                } else {
+                                    href = "/";
+                                }
                             } else {
-                                href = `/${i.toLowerCase().replace(" ", "-")}`
+                                href = `/${item.toLowerCase().replace(" ", "-")}`;
                             }
-                            const active = href == pathName
-                            return <Link key={index} href={href} className={`text-sm font-medium transition
-                        ${active ? "text-white" : "text-gray-400 hover:text-white"
-                                }`}>{i}</Link>
+
+                            const active = href === pathName;
+                            return (
+                                <Link 
+                                    key={index} 
+                                    href={href} 
+                                    className={`text-sm font-bold tracking-tight transition-all duration-300
+                                        ${active ? "text-white scale-110" : "text-gray-400 hover:text-white hover:scale-105"}`}
+                                >
+                                    {label}
+                                </Link>
+                            );
                         })}
                     </div>
                     <div className="flex items-center gap-3 relative">
@@ -96,9 +112,17 @@ function Nav() {
                                                             <ChevronRight size={16} />
                                                         </div>
                                                     )}
+                                                    <button className="w-full flex items-center gap-3 py-3 hover:bg-gray-100 rounded-xl" onClick={() => { router.push("/user/bookings"); setProfileOpen(false); }}>
+                                                        <div className="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center">
+                                                            <Clock size={14} />
+                                                        </div>
+                                                        <span className="flex-1 text-left font-medium">My Rides</span>
+                                                        <ChevronRight size={16} />
+                                                    </button>
+
                                                     <button className="w-full flex items-center gap-3 py-3 hover:bg-gray-100 rounded-xl mt-2" onClick={handleLogout}>
                                                         <LogOut size={16} />
-                                                        <span className="flex-1 text-left">Logout</span>
+                                                        <span className="flex-1 text-left font-medium text-red-500">Logout</span>
                                                     </button>
                                                 </div>
                                             </motion.div>
@@ -149,15 +173,33 @@ function Nav() {
                         >
 
                             <div className="flex flex-col divide-y divide-white/10">
-                                {Nav_Items.map((i, index) => {
-                                    let href;
-                                    if (i == "Home") {
-                                        href = `/`
+                                {Nav_Items.map((item, index) => {
+                                    let href = "/";
+                                    let label = item;
+
+                                    if (item === "Home") href = "/";
+                                    else if (item === "Booking") {
+                                        if (userData) {
+                                            label = "My Rides";
+                                            href = "/user/bookings";
+                                        } else {
+                                            href = "/";
+                                        }
                                     } else {
-                                        href = `/${i.toLowerCase().replace(" ", "-")}`
+                                        href = `/${item.toLowerCase().replace(" ", "-")}`;
                                     }
-                                    const active = href == pathName
-                                    return <Link key={index} href={href} className="px-6 py-4 text-gray-300">{i}</Link>
+                                    const active = href === pathName;
+                                    return (
+                                        <Link 
+                                            key={index} 
+                                            href={href} 
+                                            onClick={() => setMenuOpen(false)}
+                                            className={`px-6 py-5 text-sm font-bold tracking-widest uppercase transition-colors
+                                                ${active ? "text-white bg-white/5" : "text-gray-400 hover:text-white"}`}
+                                        >
+                                            {label}
+                                        </Link>
+                                    );
                                 })}
                             </div>
                         </motion.div>

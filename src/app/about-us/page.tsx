@@ -15,6 +15,9 @@ import {
   Layers
 } from 'lucide-react'
 import Image from 'next/image'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
+import { useRouter } from 'next/navigation'
 
 const TechnicalStack = [
   { name: 'Next.js 15', icon: Globe2, description: 'Cutting-edge frontend performance' },
@@ -26,8 +29,10 @@ const TechnicalStack = [
 ]
 
 export default function AboutPage() {
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-900">
+      <Nav />
       {/* Immersive Founder Hero */}
       <section className="relative min-h-[90vh] flex items-center pt-20 overflow-hidden bg-neutral-950">
         <div className="absolute inset-0 opacity-20">
@@ -168,15 +173,19 @@ export default function AboutPage() {
             Let's build something that matters.
           </p>
           <div className="flex flex-wrap justify-center gap-6">
-            <a href="mailto:08keshavjindal10@gmail.com" className="px-10 py-5 bg-blue-500 text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center gap-3 shadow-2xl shadow-blue-500/20 hover:scale-105 transition-all">
-              <Mail size={18} /> Send Email
-            </a>
-            <button className="px-10 py-5 bg-black text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center gap-3 shadow-2xl shadow-black/20 hover:scale-105 transition-all">
-              View Full Portfolio <ChevronRight size={18} />
+            <button 
+              onClick={() => router.push('/')}
+              className="px-10 py-5 bg-blue-500 text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center gap-3 shadow-2xl shadow-blue-500/20 hover:scale-105 transition-all"
+            >
+              <Zap size={18} /> Book a Ride Now
             </button>
+            <a href="mailto:08keshavjindal10@gmail.com" className="px-10 py-5 bg-black text-white rounded-2xl font-black uppercase tracking-widest text-sm flex items-center gap-3 shadow-2xl shadow-black/20 hover:scale-105 transition-all">
+              <Mail size={18} /> Contact Founder
+            </a>
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   )
 }

@@ -66,7 +66,7 @@ export default function PartnerTripPage() {
         })
 
         if (newStatus === 'completed') {
-          setTimeout(() => router.push('/partner/dashboard'), 2000)
+          setTimeout(() => router.push('/'), 2000)
         }
       }
     } catch (err) {
@@ -92,10 +92,10 @@ export default function PartnerTripPage() {
           <p className="text-neutral-900 font-bold">{booking?.cancelReason || "No reason specified"}</p>
         </div>
         <button
-          onClick={() => router.push('/partner/dashboard')}
+          onClick={() => router.push('/')}
           className="px-12 py-5 bg-black text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-2xl shadow-black/20"
         >
-          Return to Dashboard
+          Return to Home
         </button>
       </div>
     )
